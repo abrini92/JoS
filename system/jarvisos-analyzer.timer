@@ -1,0 +1,15 @@
+[Unit]
+Description=JarvisOS Analyzer Timer - Run every 6 hours
+Documentation=https://github.com/yourusername/jarvisos
+
+[Timer]
+# Run every 6 hours
+OnBootSec=10min
+OnUnitActiveSec=6h
+
+# Run at 3 AM daily (nightly evolution)
+OnCalendar=daily
+OnCalendar=03:00
+
+[Install]
+WantedBy=timers.target

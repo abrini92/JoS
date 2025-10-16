@@ -1,0 +1,14 @@
+[Unit]
+Description=JarvisOS Nightly Evolution Timer - Run at 3 AM
+Documentation=https://github.com/yourusername/jarvisos
+
+[Timer]
+# Run every night at 3 AM
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+
+# Also run on boot if missed
+OnBootSec=5min
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=JarvisOS Analyzer - AI Pattern Analysis
+After=jarvisos-observer.service
+Requires=jarvisos-observer.service
+Documentation=https://github.com/yourusername/jarvisos
+
+[Service]
+Type=oneshot
+User=jarvis
+Group=jarvis
+WorkingDirectory=/opt/jarvisos
+Environment="PATH=/opt/jarvisos/venv/bin:/usr/local/bin:/usr/bin"
+Environment="ANTHROPIC_API_KEY=your_key_here"
+
+# Run analyzer
+ExecStart=/opt/jarvisos/venv/bin/python /opt/jarvisos/jarvis.py analyze
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jarvisos-analyzer

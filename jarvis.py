@@ -97,6 +97,13 @@ def cmd_run(args):
         sys.exit(1)
 
 
+def cmd_summary(args):
+    """Show observation summary"""
+    print_banner()
+    observer = Observer()
+    observer.display_summary()
+
+
 def cmd_status(args):
     """Show system status"""
     print_banner()
@@ -235,6 +242,10 @@ For more info: https://github.com/yourusername/jarvisos
     # Status command
     status_parser = subparsers.add_parser('status', help='Show system status')
     status_parser.set_defaults(func=cmd_status)
+    
+    # Summary command
+    summary_parser = subparsers.add_parser('summary', help='Show observation summary')
+    summary_parser.set_defaults(func=cmd_summary)
     
     # Parse arguments
     args = parser.parse_args()

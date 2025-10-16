@@ -1,0 +1,27 @@
+[Unit]
+Description=JarvisOS Observer - Continuous System Monitoring
+After=network.target
+Documentation=https://github.com/yourusername/jarvisos
+
+[Service]
+Type=simple
+User=jarvis
+Group=jarvis
+WorkingDirectory=/opt/jarvisos
+Environment="PATH=/opt/jarvisos/venv/bin:/usr/local/bin:/usr/bin"
+Environment="ANTHROPIC_API_KEY=your_key_here"
+
+# Run observer continuously
+ExecStart=/opt/jarvisos/venv/bin/python /opt/jarvisos/jarvis.py observe --duration 300 --interval 10
+
+# Restart on failure
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jarvisos-observer
+
+[Install]
+WantedBy=multi-user.target

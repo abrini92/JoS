@@ -77,3 +77,15 @@ lint:
 
 check: test lint
 	@echo "All checks passed!"
+
+test-verbose:
+	@echo "Running tests with verbose output..."
+	python -m pytest tests/ -v
+
+test-coverage:
+	@echo "Running tests with coverage..."
+	python -m pytest tests/ --cov=jarvisos --cov-report=html --cov-report=term
+
+test-watch:
+	@echo "Running tests in watch mode..."
+	python -m pytest tests/ -f

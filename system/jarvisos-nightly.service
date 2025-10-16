@@ -1,0 +1,24 @@
+[Unit]
+Description=JarvisOS Nightly Evolution - Full Pipeline
+Documentation=https://github.com/yourusername/jarvisos
+
+[Service]
+Type=oneshot
+User=jarvis
+Group=jarvis
+WorkingDirectory=/opt/jarvisos
+Environment="PATH=/opt/jarvisos/venv/bin:/usr/local/bin:/usr/bin"
+Environment="ANTHROPIC_API_KEY=your_key_here"
+
+# Run full evolution pipeline
+ExecStartPre=/opt/jarvisos/venv/bin/python /opt/jarvisos/jarvis.py observe --duration 60 --interval 10
+ExecStart=/opt/jarvisos/venv/bin/python /opt/jarvisos/jarvis.py analyze
+ExecStartPost=/opt/jarvisos/venv/bin/python /opt/jarvisos/jarvis.py generate
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jarvisos-nightly
+
+[Install]
+WantedBy=multi-user.target
