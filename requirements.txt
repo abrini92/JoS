@@ -1,0 +1,24 @@
+# JarvisOS - Self-Building Operating System
+# Python 3.11+ required
+
+# Core dependencies
+anthropic>=0.18.0          # Claude API integration
+psutil>=5.9.0              # System monitoring
+rich>=13.7.0               # Beautiful console output
+fastapi>=0.109.0           # API services
+uvicorn>=0.27.0            # ASGI server
+pydantic>=2.5.0            # Data validation
+
+# Database
+sqlalchemy>=2.0.25         # ORM
+aiosqlite>=0.19.0          # Async SQLite
+
+# Utilities
+python-dotenv>=1.0.0       # Environment variables
+watchdog>=3.0.0            # File system monitoring
+schedule>=1.2.0            # Task scheduling
+
+# Development
+pytest>=7.4.0              # Testing
+black>=24.1.0              # Code formatting
+ruff>=0.1.0                # Linting
