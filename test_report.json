@@ -1,0 +1,88 @@
+{
+  "total_score": 95.0,
+  "max_score": 105.0,
+  "percentage": 90.47619047619048,
+  "grade": "A+",
+  "results": [
+    {
+      "category": "Code Quality",
+      "test_name": "Python Syntax",
+      "passed": true,
+      "score": 10.0,
+      "message": "\u2705 No syntax errors",
+      "details": ""
+    },
+    {
+      "category": "Code Quality",
+      "test_name": "Import Check",
+      "passed": true,
+      "score": 10.0,
+      "message": "\u2705 All imports valid",
+      "details": ""
+    },
+    {
+      "category": "Code Quality",
+      "test_name": "File Structure",
+      "passed": true,
+      "score": 10.0,
+      "message": "\u2705 All required files present",
+      "details": "Required: 11, Found: 11"
+    },
+    {
+      "category": "Unit Tests",
+      "test_name": "Pytest Suite",
+      "passed": true,
+      "score": 30.0,
+      "message": "\u2705 61 tests passed",
+      "details": "     [ 91%]\ntests/test_voice.py::TestJarvisVoice::test_jarvis_ask_question PASSED    [ 93%]\ntests/test_voice.py::TestJarvisVoice::test_jarvis_wake_word PASSED       [ 95%]\ntests/test_voice.py::TestJarvisVoice::test_jarvis_listening_state PASSED [ 96%]\ntests/test_voice.py::TestVoiceIntegration::test_full_voice_pipeline PASSED [ 98%]\ntests/test_voice.py::TestVoiceIntegration::test_voice_with_no_engines PASSED [100%]\n\n======================= 61 passed, 2 warnings in 12.39s ========================\n"
+    },
+    {
+      "category": "Integration",
+      "test_name": "CLI: status",
+      "passed": true,
+      "score": 5.0,
+      "message": "\u2705 Command works",
+      "details": ""
+    },
+    {
+      "category": "Integration",
+      "test_name": "CLI: dna",
+      "passed": true,
+      "score": 5.0,
+      "message": "\u2705 Command works",
+      "details": ""
+    },
+    {
+      "category": "Integration",
+      "test_name": "CLI: genes",
+      "passed": true,
+      "score": 5.0,
+      "message": "\u2705 Command works",
+      "details": ""
+    },
+    {
+      "category": "Performance",
+      "test_name": "Import Speed",
+      "passed": true,
+      "score": 10.0,
+      "message": "\u2705 Fast (0.01s)",
+      "details": "Target: <2s, Actual: 0.01s"
+    },
+    {
+      "category": "Security",
+      "test_name": "No Hardcoded Secrets",
+      "passed": false,
+      "score": 0.0,
+      "message": "\u26a0\ufe0f Found: analyzer.py:38, generator.py:41",
+      "details": ""
+    },
+    {
+      "category": "Documentation",
+      "test_name": "README Quality",
+      "passed": true,
+      "score": 10.0,
+      "message": "\u2705 Good README (3/3)",
+      "details": ""
+    }
+  ]
+}

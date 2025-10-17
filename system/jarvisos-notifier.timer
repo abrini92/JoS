@@ -1,0 +1,11 @@
+[Unit]
+Description=JarvisOS Notifier Timer (every hour)
+Requires=jarvisos-notifier.service
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Unit=jarvisos-notifier.service
+
+[Install]
+WantedBy=timers.target

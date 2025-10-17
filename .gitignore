@@ -54,3 +54,8 @@ htmlcov/
 *.tmp
 *.bak
 *.log
+
+# ISO Build
+iso-build/
+iso/
+*.iso

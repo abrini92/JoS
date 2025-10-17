@@ -1,0 +1,14 @@
+[Unit]
+Description=JarvisOS Proactive Notifier
+After=network.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/jarvisos
+ExecStart=/opt/jarvisos/venv/bin/python -m jarvisos.core.notifier
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

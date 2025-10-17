@@ -18,6 +18,13 @@ python-dotenv>=1.0.0       # Environment variables
 watchdog>=3.0.0            # File system monitoring
 schedule>=1.2.0            # Task scheduling
 
+# Voice (optional but recommended)
+pyttsx3>=2.90              # Text-to-Speech (cross-platform)
+SpeechRecognition>=3.10.0  # Speech-to-Text
+PyAudio>=0.2.13            # Audio I/O (for microphone)
+# openai-whisper>=20231117 # Whisper STT (best quality, optional)
+# gTTS>=2.4.0              # Google TTS (optional)
+
 # Development
 pytest>=7.4.0              # Testing
 black>=24.1.0              # Code formatting

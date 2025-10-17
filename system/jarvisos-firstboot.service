@@ -1,0 +1,19 @@
+[Unit]
+Description=JarvisOS First Boot Onboarding
+After=graphical.target
+ConditionPathExists=!/opt/jarvisos/data/onboarding.json
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/jarvisos
+ExecStart=/opt/jarvisos/venv/bin/python -m jarvisos.core.onboarding
+StandardInput=tty
+StandardOutput=journal+console
+StandardError=journal
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+
+[Install]
+WantedBy=graphical.target

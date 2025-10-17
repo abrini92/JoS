@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Jarvis Welcome
+Comment=JarvisOS Auto-start
+Exec=/opt/jarvisos/system/jarvisos-desktop-welcome.sh
+Icon=utilities-terminal
+Terminal=false
+Categories=System;
+X-GNOME-Autostart-enabled=true
