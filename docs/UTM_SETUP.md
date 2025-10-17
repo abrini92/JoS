@@ -1,6 +1,6 @@
-# 🖥️ JarvisOS on UTM (Mac)
+# 🖥️ JarvisOS on UTM (Mac) - FOUNDER MODE
 
-Quick guide to run JarvisOS on UTM (Mac virtual machine).
+**Run JarvisOS with full interactive onboarding on UTM**
 
 ---
 
@@ -15,19 +15,22 @@ Or download from: https://mac.getutm.app/
 
 ---
 
-## 🚀 Quick Setup (Without ISO)
+## 🚀 Quick Setup - Ubuntu 22.04 (RECOMMENDED)
 
-Since we don't have the ISO built yet, we'll create a VM with Arch Linux and install JarvisOS manually.
+**Easiest way to get JarvisOS running with full features**
 
-### Step 1: Download Arch Linux ISO
+### Step 1: Download Ubuntu 22.04
 
+**For Apple Silicon (M1/M2/M3):**
 ```bash
-# Download Arch Linux ARM (for Apple Silicon) or x86_64 (for Intel)
-# For Apple Silicon:
-wget https://mirror.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
+# Download Ubuntu Server ARM64
+wget https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.3-live-server-arm64.iso
+```
 
-# For Intel Mac:
-wget https://mirror.archlinux.org/iso/latest/archlinux-x86_64.iso
+**For Intel Mac:**
+```bash
+# Download Ubuntu Desktop AMD64
+wget https://releases.ubuntu.com/22.04/ubuntu-22.04.3-desktop-amd64.iso
 ```
 
 ### Step 2: Create VM in UTM
@@ -42,72 +45,60 @@ wget https://mirror.archlinux.org/iso/latest/archlinux-x86_64.iso
    - **Storage:** 20GB
 6. Click "Save"
 
-### Step 3: Start VM & Install Arch
+### Step 3: Install Ubuntu
 
-1. Start the VM
-2. Boot from ISO
-3. Basic Arch installation:
+1. Start the VM in UTM
+2. Follow Ubuntu installer:
+   - Language: English
+   - Keyboard: Your layout
+   - Installation type: Normal installation
+   - Erase disk and install Ubuntu
+   - **Username:** jarvis
+   - **Password:** jarvis (or your choice)
+   - Wait for installation (10-15 min)
+3. Reboot when prompted
+4. Remove ISO from UTM settings
 
-```bash
-# Connect to internet
-iwctl
-station wlan0 connect "YourWiFi"
+### Step 4: Install JarvisOS (ONE COMMAND!)
 
-# Partition disk
-cfdisk /dev/vda
-# Create: 512MB EFI, rest Linux filesystem
-
-# Format
-mkfs.fat -F32 /dev/vda1
-mkfs.ext4 /dev/vda2
-
-# Mount
-mount /dev/vda2 /mnt
-mkdir /mnt/boot
-mount /dev/vda1 /mnt/boot
-
-# Install base
-pacstrap /mnt base linux linux-firmware
-
-# Generate fstab
-genfstab -U /mnt >> /mnt/etc/fstab
-
-# Chroot
-arch-chroot /mnt
-
-# Install essentials
-pacman -S grub efibootmgr networkmanager python python-pip git base-devel
-
-# Configure GRUB
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-grub-mkconfig -o /boot/grub/grub.cfg
-
-# Set root password
-passwd
-
-# Exit and reboot
-exit
-reboot
-```
-
-### Step 4: Install JarvisOS
-
-After reboot, login as root:
+After Ubuntu boots and you login:
 
 ```bash
-# Connect network
-systemctl start NetworkManager
-systemctl enable NetworkManager
-nmcli device wifi connect "YourWiFi" password "password"
+# Install JarvisOS with interactive onboarding
+curl -sSL https://raw.githubusercontent.com/abrini92/JoS/main/install.sh | bash
 
-# Clone JarvisOS
-cd /opt
-git clone https://github.com/yourusername/jarvisos.git
-cd jarvisos
-
-# Install
-./install-system.sh
+# OR manually:
+git clone https://github.com/abrini92/JoS.git
+cd JoS
+chmod +x setup-boot-experience.sh
+./setup-boot-experience.sh
 ```
+
+This will:
+- ✅ Install all dependencies
+- ✅ Setup JarvisOS CLI
+- ✅ Configure boot screen (Arc Reactor Blue!)
+- ✅ Enable interactive onboarding
+- ✅ Setup voice (Jarvis speaks!)
+
+### Step 5: First Boot Experience 🎬
+
+**Reboot to experience the magic:**
+
+```bash
+sudo reboot
+```
+
+**What happens:**
+1. **Arc Reactor Boot Screen** - Blue animated boot
+2. **Login** - Auto-login to Jarvis account
+3. **Jarvis Welcomes You!** 🤖
+   - "Hello, I am Jarvis"
+   - Asks your name (type or speak!)
+   - Asks your role (Developer, Designer, etc.)
+   - Quick features tour
+   - Optional demo
+4. **Ready!** - System configured for you
 
 ---
 

@@ -232,11 +232,11 @@ def cmd_listen(args):
 
 
 def cmd_onboard(args):
-    """Interactive onboarding"""
-    manager = OnboardingManager(use_voice=not args.no_voice if hasattr(args, 'no_voice') else True)
-    profile = manager.run_onboarding()
+    """Interactive onboarding - New immersive experience"""
+    from jarvisos.onboarding import JarvisOnboarding
     
-    console.print(f"\n[green]✅ Onboarding complete! Welcome, {profile['name']}![/green]\n")
+    onboarding = JarvisOnboarding()
+    onboarding.run()
 
 
 def cmd_notify(args):

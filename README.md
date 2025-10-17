@@ -1,15 +1,18 @@
 # 🤖 JarvisOS
 
-**The First Self-Building Operating System**
+**The Simple AI OS That Just Works**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Status](https://img.shields.io/badge/status-MVP%20Working-brightgreen.svg)](https://github.com/yourusername/jarvisos)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Ollama](https://img.shields.io/badge/AI-Ollama%20Local-blue.svg)](https://ollama.ai/)
 
-> **An AI-powered OS that observes your behavior, learns your patterns, and automatically generates custom automation scripts. It literally builds itself around you.**
+> **Tired of complex AI Operating Systems? JarvisOS installs in 1 command, runs 100% local with Ollama, and learns your behavior.**
 
-**Status: MVP Complete & Working!**
+```bash
+curl -sSL https://raw.githubusercontent.com/abrini92/JoS/main/install.sh | bash
+```
+
+**Install in 15 minutes. No API keys. No cloud. Just works.**
 
 ---
 
@@ -44,9 +47,13 @@ $ python jarvis.py run 1
 
 **That's it. Your OS just evolved.** 
 
-## Vision
+## Why JarvisOS?
 
-Traditional operating systems are static. **JarvisOS is alive.**
+**vs OpenDAN:** Complex 30-step setup → JarvisOS: 1 command  
+**vs AIOS:** Research-focused → JarvisOS: User-focused  
+**vs Claude API:** Costs money → JarvisOS: Free (Ollama)  
+
+**Not the most powerful AI OS. The most practical one.**
 
 **Observes** your daily computer usage
 **Analyzes** patterns with Claude AI
