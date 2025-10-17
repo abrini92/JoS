@@ -26,6 +26,7 @@ from jarvisos.core.notifier import ProactiveNotifier
 from jarvisos.core.context import ContextAnalyzer, SmartInterruptionManager
 from jarvisos.core.feedback import FeedbackManager, FeedbackIntegration
 from jarvisos.voice.jarvis_voice import JarvisVoice
+from jarvisos.core.self_improver import SelfImprover
 
 # Predictive Engine V2 - TOP 0.1%
 try:
@@ -479,35 +480,111 @@ def cmd_suggest(args):
         console.print("[red]Predictive Engine not available[/red]")
         return
     
-    data_dir = Path("data")
+    print_banner()
+    
+    # Get operational intelligence
+    op_intel = OperationalIntelligence()
+    suggestions = op_intel.get_proactive_suggestions()
+    
+    if not suggestions:
+        console.print("\n[cyan]✨ Everything looks good! No urgent suggestions.[/cyan]\n")
+        return
     
     console.print("\n[bold cyan]💡 Proactive Suggestions[/bold cyan]\n")
     
-    # Initialize
-    ai_brain = AIBrain(data_dir)
-    op_intel = OperationalIntelligence(data_dir, ai_brain)
-    
-    console.print("[dim]AI is analyzing your current state...[/dim]\n")
-    
-    # Get suggestions
-    suggestions = op_intel.get_proactive_suggestions()
-    
-    if suggestions:
-        for i, sug in enumerate(suggestions, 1):
-            console.print(Panel(
-                f"[bold]{sug['action']}[/bold]\n\n"
-                f"{sug['reason']}\n\n"
-                f"[dim]Priority: {sug['priority'].upper()}[/dim]",
-                title=f"💡 Suggestion {i}",
-                border_style="yellow"
-            ))
-            console.print()
+    for i, suggestion in enumerate(suggestions, 1):
+        priority_color = {
+            'critical': 'red',
+            'high': 'yellow',
+            'medium': 'cyan',
+            'low': 'green'
+        }.get(suggestion.priority, 'white')
         
-        # Show Jarvis message
-        if suggestions[0].get('message'):
-            console.print(f"[bold cyan]Jarvis:[/bold cyan] {suggestions[0]['message']}\n")
-    else:
-        console.print("[green]✓ No suggestions right now - you're doing great![/green]\n")
+        console.print(f"[{priority_color}]{i}. [{suggestion.priority.upper()}] {suggestion.type}[/{priority_color}]")
+        console.print(f"   {suggestion.message}")
+        
+        if suggestion.action:
+            console.print(f"   💡 Action: [cyan]{suggestion.action}[/cyan]")
+        console.print()
+
+
+def cmd_improvements(args):
+    """Show self-improvement suggestions"""
+    print_banner()
+    
+    improver = SelfImprover()
+    improvements = improver.get_improvements(status=args.status if hasattr(args, 'status') else None)
+    
+    if not improvements:
+        console.print("\n[cyan]✨ No improvements yet! Keep using JarvisOS.[/cyan]\n")
+        console.print("[dim]The self-improvement engine monitors your patterns and suggests optimizations.[/dim]\n")
+        return
+    
+    console.print(f"\n[bold cyan]🧬 Self-Improvements ({len(improvements)})[/bold cyan]\n")
+    
+    for imp in improvements:
+        status_emoji = {
+            'pending': '⏳',
+            'approved': '✅',
+            'rejected': '❌'
+        }.get(imp['status'], '❓')
+        
+        risk_color = {
+            'low': 'green',
+            'moderate': 'yellow',
+            'high': 'red'
+        }.get(imp['risk_level'], 'white')
+        
+        console.print(f"{status_emoji} [bold]ID {imp['id']}[/bold] - [{risk_color}]{imp['risk_level'].upper()} RISK[/{risk_color}]")
+        console.print(f"   Pattern: {imp['pattern']['command']} ({imp['pattern']['count']}x)")
+        console.print(f"   Type: {imp['pattern']['type']}")
+        console.print(f"   Suggestion: {imp['suggestion']}")
+        console.print()
+
+
+def cmd_approve(args):
+    """Approve an improvement"""
+    print_banner()
+    
+    improver = SelfImprover()
+    improvements = improver.get_improvements(status='pending')
+    
+    # Find improvement by ID
+    improvement = None
+    for imp in improvements:
+        if imp['id'] == args.improvement_id:
+            improvement = imp
+            break
+    
+    if not improvement:
+        console.print(f"\n[red]❌ Improvement ID {args.improvement_id} not found[/red]\n")
+        return
+    
+    console.print(f"\n[bold]Approving improvement {improvement['id']}...[/bold]")
+    console.print(f"Pattern: {improvement['pattern']['command']}")
+    console.print(f"Risk: {improvement['risk_level']}")
+    console.print()
+    
+    # TODO: Apply improvement
+    console.print("[green]✅ Approved! (Implementation in v1.0)[/green]\n")
+
+
+def cmd_self_status(args):
+    """Show self-improvement status"""
+    print_banner()
+    
+    improver = SelfImprover()
+    
+    pending = improver.get_improvements(status='pending')
+    approved = improver.get_improvements(status='approved')
+    
+    console.print("\n[bold cyan]🧬 Self-Improvement Status[/bold cyan]\n")
+    console.print(f"Pending improvements: {len(pending)}")
+    console.print(f"Approved improvements: {len(approved)}")
+    console.print()
+    
+    if pending:
+        console.print("[yellow]💡 Run 'jarvis improvements' to review pending suggestions[/yellow]\n")
 
 
 def main():
@@ -646,6 +723,18 @@ def main():
         # Suggest command
         suggest_parser = subparsers.add_parser('suggest', help='💡 Get proactive suggestions')
         suggest_parser.set_defaults(func=cmd_suggest)
+    
+    # Self-Improvement commands
+    improvements_parser = subparsers.add_parser('improvements', help='🧬 View self-improvement suggestions')
+    improvements_parser.add_argument('--status', choices=['pending', 'approved', 'rejected'], help='Filter by status')
+    improvements_parser.set_defaults(func=cmd_improvements)
+    
+    approve_parser = subparsers.add_parser('approve', help='✅ Approve an improvement')
+    approve_parser.add_argument('improvement_id', help='Improvement ID to approve')
+    approve_parser.set_defaults(func=cmd_approve)
+    
+    self_status_parser = subparsers.add_parser('self-status', help='🔍 Self-improvement engine status')
+    self_status_parser.set_defaults(func=cmd_self_status)
     
     # Parse arguments
     args = parser.parse_args()
