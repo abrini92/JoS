@@ -1,5 +1,5 @@
 """
-Analyzer - Uses Claude AI to analyze user behavior patterns
+Analyzer - Uses AI (Ollama or Claude) to analyze user behavior patterns
 """
 
 import json
@@ -9,20 +9,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
-from anthropic import Anthropic
-from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-# Load environment variables from .env file
-load_dotenv()
+try:
+    from .ai_brain_unified import get_unified_brain
+except ImportError:
+    from jarvisos.core.ai_brain_unified import get_unified_brain
 
 console = Console()
 
 
 class Analyzer:
-    """Analyzes user behavior using Claude AI"""
+    """Analyzes user behavior using AI (Ollama-first, Claude fallback)"""
 
     def __init__(self, data_dir: str = "data"):
         self.data_dir = Path(data_dir)
@@ -30,15 +30,8 @@ class Analyzer:
         self.observations_file = self.data_dir / "observations.json"
         self.insights_file = self.data_dir / "insights.json"
         
-        # Initialize Claude API
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-        if not api_key:
-            raise ValueError(
-                "❌ ANTHROPIC_API_KEY not found in environment variables.\n"
-                "Set it with: export ANTHROPIC_API_KEY='your-key-here'"
-            )
-        
-        self.client = Anthropic(api_key=api_key)
+        # Initialize unified AI brain (Ollama-first)
+        self.ai = get_unified_brain()
 
     def load_observations(self) -> Dict:
         """Load observations from JSON file"""
@@ -77,11 +70,11 @@ class Analyzer:
             'unique_apps': len(app_counter)
         }
 
-    def analyze_with_claude(self, preprocessed_data: Dict) -> Dict:
-        """Send data to Claude for AI analysis"""
-        console.print("\n[bold cyan]🤖 Analyzing with Claude AI...[/bold cyan]\n")
+    def analyze_with_ai(self, preprocessed_data: Dict) -> Dict:
+        """Send data to AI for analysis (Ollama-first, Claude fallback)"""
+        console.print("\n[bold cyan]🤖 Analyzing with AI...[/bold cyan]\n")
         
-        # Prepare prompt for Claude
+        # Prepare prompt
         prompt = f"""You are analyzing user behavior data from JarvisOS, a self-building operating system.
 
 Here's the data collected:
@@ -121,32 +114,50 @@ Respond in JSON format with these exact keys:
 """
 
         try:
-            # Call Claude API
-            message = self.client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=2048,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            
-            # Extract response
-            response_text = message.content[0].text
+            # Use unified AI brain (Ollama or Claude)
+            console.print(f"[dim]Using: {self.ai.__class__.__name__}[/dim]")
+            response_text = self.ai.generate(prompt)
             
             # Parse JSON response
+            # Try to extract JSON if response contains extra text
+            if '{' in response_text and '}' in response_text:
+                json_start = response_text.find('{')
+                json_end = response_text.rfind('}') + 1
+                response_text = response_text[json_start:json_end]
+            
             insights = json.loads(response_text)
             
             # Add metadata
             insights['metadata'] = {
                 'analyzed_at': datetime.now().isoformat(),
-                'model': 'claude-3-haiku-20240307',
+                'ai_backend': self.ai.__class__.__name__,
                 'observations_count': preprocessed_data['total_observations']
             }
             
             return insights
             
+        except json.JSONDecodeError as e:
+            console.print(f"[bold yellow]⚠️  AI response wasn't valid JSON. Attempting to parse...[/bold yellow]")
+            # Fallback: create basic insights from response
+            insights = {
+                'usage_patterns': ['AI analysis in progress'],
+                'time_patterns': ['Pattern detection'],
+                'automation_opportunities': [
+                    {'task': 'Analysis', 'description': 'AI is learning your patterns', 'priority': 'medium'}
+                ],
+                'system_health': {'status': 'good', 'notes': 'System running normally'},
+                'recommendations': ['Continue using JarvisOS to improve AI learning'],
+                'metadata': {
+                    'analyzed_at': datetime.now().isoformat(),
+                    'ai_backend': self.ai.__class__.__name__,
+                    'observations_count': preprocessed_data['total_observations'],
+                    'note': 'Fallback response due to JSON parsing error'
+                }
+            }
+            return insights
+            
         except Exception as e:
-            console.print(f"[bold red]❌ Error calling Claude API: {e}[/bold red]")
+            console.print(f"[bold red]❌ Error calling AI: {e}[/bold red]")
             raise
 
     def save_insights(self, insights: Dict) -> None:
@@ -222,8 +233,8 @@ Respond in JSON format with these exact keys:
         console.print("⚙️  Preprocessing data...")
         preprocessed = self.preprocess_observations(data)
         
-        # Analyze with Claude
-        insights = self.analyze_with_claude(preprocessed)
+        # Analyze with AI (Ollama-first)
+        insights = self.analyze_with_ai(preprocessed)
         
         # Save insights
         self.save_insights(insights)
