@@ -9,11 +9,11 @@
 
 > **An AI-powered OS that observes your behavior, learns your patterns, and automatically generates custom automation scripts. It literally builds itself around you.**
 
-**🎉 Day 1 Status: MVP Complete & Working!**
+**Status: MVP Complete & Working!**
 
 ---
 
-## 🚀 Quick Demo
+## Quick Demo
 
 ```bash
 # 1. Observe your system
@@ -42,43 +42,43 @@ $ python jarvis.py run 1
 ✅ Script executed successfully!
 ```
 
-**That's it. Your OS just evolved.** 🎯
+**That's it. Your OS just evolved.** 
 
-## 🎯 Vision
+## Vision
 
 Traditional operating systems are static. **JarvisOS is alive.**
 
-- 👀 **Observes** your daily computer usage
-- 🧠 **Analyzes** patterns with Claude AI
-- ⚙️ **Generates** custom automation scripts
-- 🚀 **Executes** safely with your approval
-- 🌙 **Evolves** every night while you sleep
+**Observes** your daily computer usage
+**Analyzes** patterns with Claude AI
+**Generates** custom automation scripts
+**Executes** safely with your approval
+**Evolves** every night while you sleep
 
-## ✨ What Makes This Special
+## What Makes This Special
 
-### 🎯 **Self-Building**
+### **Self-Building**
 Unlike traditional OSs that are the same for everyone, JarvisOS **generates custom code** specifically for YOUR workflow. No two installations are alike.
 
-### 🧠 **AI-Powered**
+### **AI-Powered**
 Uses Claude Haiku to analyze patterns and generate production-ready Python scripts. Not just suggestions—actual working code.
 
-### 🔒 **Privacy-First**
+### **Privacy-First**
 All data stays local. No cloud storage, no telemetry, no tracking. Your data never leaves your machine.
 
-### ⚡ **Actually Works**
+### **Actually Works**
 This isn't vaporware. Full pipeline working end-to-end. Observer → Analyzer → Generator → Executor. **Try it now.**
 
-### 🆓 **Open Source**
+### **Open Source**
 MIT licensed. Fork it, modify it, audit it. Full transparency. No backdoors, ever.
 
-## 🎯 Features
+## Features
 
-- ✅ **Behavior Observation**: Monitors running applications, system stats, usage patterns
-- ✅ **AI Analysis**: Claude AI identifies automation opportunities  
-- ✅ **Code Generation**: Automatically writes Python scripts for your needs
-- ✅ **Safe Execution**: Preview and approve all scripts before running
-- ✅ **Beautiful CLI**: Rich terminal interface with progress bars and colors
-- ✅ **Full Documentation**: Comprehensive guides for users and developers
+**Behavior Observation**: Monitors running applications, system stats, usage patterns
+  **AI Analysis**: Claude AI identifies automation opportunities  
+  **Code Generation**: Automatically writes Python scripts for your needs
+  **Safe Execution**: Preview and approve all scripts before running
+  **Beautiful CLI**: Rich terminal interface with progress bars and colors
+  **Full Documentation**: Comprehensive guides for users and developers
 
 ## 🛠️ Tech Stack
 
@@ -89,7 +89,7 @@ MIT licensed. Fork it, modify it, audit it. Full transparency. No backdoors, eve
 - **Database**: SQLite
 - **CLI**: Rich (beautiful terminal output)
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 
@@ -118,7 +118,7 @@ export ANTHROPIC_API_KEY='your-api-key-here'
 chmod +x jarvis.py
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Observe Your Behavior
 
@@ -163,7 +163,7 @@ python jarvis.py run 1
 python jarvis.py status
 ```
 
-## 📖 Commands
+## Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -174,7 +174,7 @@ python jarvis.py status
 | `run` | Execute a script | `jarvis.py run 1` |
 | `status` | Show system status | `jarvis.py status` |
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 jarvisos/
@@ -193,7 +193,7 @@ jarvisos/
 └── requirements.txt
 ```
 
-## 🔒 Privacy & Security
+## Privacy & Security
 
 - **Local First**: All data stored locally on your machine
 - **No Cloud Storage**: Observations never leave your computer
@@ -201,7 +201,7 @@ jarvisos/
 - **User Approval**: Scripts require explicit approval before execution
 - **Open Source**: Full code transparency (MIT License)
 
-## 🎨 Example Workflow
+## Example Workflow
 
 ```bash
 # Day 1: Collect data
@@ -209,27 +209,27 @@ $ python jarvis.py observe --duration 300
 
 # Analyze patterns
 $ python jarvis.py analyze
-🧠 JarvisOS AI Insights
-📊 Usage Patterns:
+  JarvisOS AI Insights
+    Usage Patterns:
   • Heavy browser usage (Chrome, Firefox)
   • Frequent terminal sessions
   • Code editor active 80% of time
 
-🤖 Automation Opportunities:
+Automation Opportunities:
   1. Auto-organize downloads folder
   2. Backup code projects daily
   3. Clean up temp files
 
 # Generate automation
 $ python jarvis.py generate
-✨ Generated: auto_organize_downloads.py
+  Generated: auto_organize_downloads.py
 
 # Execute
 $ python jarvis.py run 1
-✅ Script executed successfully!
+  Script executed successfully!
 ```
 
-## 🌟 Principles
+## Principles
 
 1. **Freedom First**: No backdoors, no telemetry, no tracking
 2. **Privacy by Default**: Your data is yours
@@ -237,20 +237,19 @@ $ python jarvis.py run 1
 4. **User Control**: You approve everything
 5. **Continuous Evolution**: Gets better every day
 
-## 🛣️ Roadmap
+## Roadmap
 
 - [x] Core observer implementation
 - [x] Claude AI integration
 - [x] Script generation
 - [x] Safe execution engine
-- [ ] Web dashboard (FastAPI)
 - [ ] Scheduled nightly evolution
 - [ ] Plugin system
 - [ ] Multi-user support
 - [ ] Docker deployment
 - [ ] Custom OS distribution
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! This is an open-source project.
 
@@ -267,23 +266,21 @@ git push origin feature/amazing-feature
 # Open a Pull Request
 ```
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Anthropic](https://anthropic.com) for Claude AI
 - [Rich](https://github.com/Textualize/rich) for beautiful terminal output
 - The open-source community
 
-## 📧 Contact
+## Contact
 
-- Twitter: [@yourusername](https://twitter.com/yourusername)
-- GitHub: [@yourusername](https://github.com/yourusername)
+- Twitter: (https://x.com/philantrope92)
+- GitHub: https://github.com/abrini92
 
 ---
-
-**Built with ❤️ and AI**
 
 *JarvisOS - Your computer, evolved.*
