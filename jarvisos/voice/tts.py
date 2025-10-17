@@ -1,6 +1,12 @@
 """
 JarvisOS Text-to-Speech System
 Converts text to natural speech
+
+Priority:
+1. Piper TTS (best quality, local, neural)
+2. macOS say (good quality, macOS only)
+3. pyttsx3 (cross-platform, basic)
+4. espeak (Linux fallback)
 """
 
 import os
@@ -21,19 +27,29 @@ class TextToSpeech:
         Initialize TTS engine
         
         Args:
-            engine: TTS engine to use ('auto', 'macos', 'pyttsx3', 'gtts')
+            engine: TTS engine to use ('auto', 'piper', 'macos', 'pyttsx3', 'gtts')
         """
         self.engine = engine
         self.available_engines = self._detect_engines()
+        self.piper_tts = None  # Lazy load
         
         if engine == "auto":
             self.engine = self._select_best_engine()
         
         logger.info(f"TTS initialized with engine: {self.engine}")
+        logger.debug(f"Available engines: {self.available_engines}")
     
     def _detect_engines(self) -> list:
         """Detect available TTS engines"""
         engines = []
+        
+        # Piper TTS (neural, high quality, local)
+        try:
+            from .piper_tts import is_piper_available
+            if is_piper_available():
+                engines.append('piper')
+        except:
+            pass
         
         # macOS say command
         if subprocess.run(['which', 'say'], capture_output=True).returncode == 0:
@@ -62,7 +78,7 @@ class TextToSpeech:
     
     def _select_best_engine(self) -> str:
         """Select best available engine"""
-        priority = ['macos', 'pyttsx3', 'gtts', 'espeak']
+        priority = ['piper', 'macos', 'pyttsx3', 'gtts', 'espeak']
         
         for engine in priority:
             if engine in self.available_engines:
@@ -86,7 +102,9 @@ class TextToSpeech:
         logger.info(f"Speaking: {text[:50]}...")
         
         try:
-            if self.engine == 'macos':
+            if self.engine == 'piper':
+                self._speak_piper(text)
+            elif self.engine == 'macos':
                 self._speak_macos(text, voice, rate)
             elif self.engine == 'pyttsx3':
                 self._speak_pyttsx3(text, voice, rate)
@@ -98,6 +116,20 @@ class TextToSpeech:
                 logger.warning(f"TTS engine '{self.engine}' not available")
         except Exception as e:
             logger.error(f"TTS failed: {e}")
+            # Fallback to pyttsx3 if Piper fails
+            if self.engine == 'piper' and 'pyttsx3' in self.available_engines:
+                logger.info("Falling back to pyttsx3")
+                self._speak_pyttsx3(text, voice, rate)
+    
+    def _speak_piper(self, text: str):
+        """Speak using Piper TTS (neural, high quality)"""
+        if self.piper_tts is None:
+            from .piper_tts import get_piper_tts
+            self.piper_tts = get_piper_tts()
+        
+        success = self.piper_tts.speak(text)
+        if not success:
+            raise Exception("Piper TTS failed")
     
     def _speak_macos(self, text: str, voice: Optional[str], rate: int):
         """Speak using macOS 'say' command"""

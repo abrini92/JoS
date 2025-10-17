@@ -116,6 +116,35 @@ fi
 
 success "Python environment ready"
 
+echo "🎙️  Installing Piper TTS (Better voice quality)..."
+PIPER_DIR="$HOME/.local/bin"
+mkdir -p "$PIPER_DIR"
+
+if ! command -v piper &> /dev/null; then
+    echo "   Downloading Piper TTS..."
+    
+    # Detect architecture
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+        PIPER_URL="https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_aarch64.tar.gz"
+    else
+        PIPER_URL="https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz"
+    fi
+    
+    if curl -L "$PIPER_URL" | tar -xzf - -C "$PIPER_DIR" --strip-components=1; then
+        # Add to PATH if not already there
+        if ! grep -q "$PIPER_DIR" ~/.bashrc; then
+            echo "export PATH=\"\$PATH:$PIPER_DIR\"" >> ~/.bashrc
+        fi
+        export PATH="$PATH:$PIPER_DIR"
+        success "Piper TTS installed"
+    else
+        warning "Piper TTS install failed (will use pyttsx3 fallback)"
+    fi
+else
+    success "Piper TTS already installed"
+fi
+
 echo "🤖 Installing Ollama (Local AI)..."
 if ! command -v ollama &> /dev/null; then
     echo "   Installing Ollama..."
@@ -261,12 +290,16 @@ cat > ~/.jarvisos-install-info << INFEOF
 Installation completed: $(date)
 Version: 0.1.0
 Ollama: $(command -v ollama && echo "installed" || echo "not found")
+Piper TTS: $(command -v piper && echo "installed" || echo "not found")
 Models: $(ollama list 2>/dev/null | grep -c llama3.2 || echo 0) installed
 Logs:
 - APT: /tmp/jarvisos-apt-install.log
 - PIP: /tmp/jarvisos-pip-install.log
 - Boot: /tmp/jarvisos-boot-setup.log
 - Ollama: /tmp/ollama.log
+
+Voice Quality:
+$(command -v piper &> /dev/null && echo "✅ Using Piper TTS (neural, high quality)" || echo "⚠️  Using pyttsx3 (basic quality)")
 INFEOF
 
 success "Installation info saved to ~/.jarvisos-install-info"

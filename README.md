@@ -51,9 +51,17 @@ $ python jarvis.py run 1
 
 **vs OpenDAN:** Complex 30-step setup → JarvisOS: 1 command  
 **vs AIOS:** Research-focused → JarvisOS: User-focused  
-**vs Claude API:** Costs money → JarvisOS: Free (Ollama)  
+**vs Cloud TTS:** Costs money, privacy → JarvisOS: Local (Piper/Ollama)  
 
 **Not the most powerful AI OS. The most practical one.**
+
+## ✨ Features
+
+- 🤖 **Local AI** - Ollama (llama3.2) - No API keys, no costs
+- 🎙️ **Neural Voice** - Piper TTS - Better than basic TTS, still 100% local
+- 🧠 **Learns You** - Observes behavior, generates insights
+- 🔒 **Privacy First** - Everything runs locally
+- ⚡ **1-Command Install** - No configuration hell
 
 **Observes** your daily computer usage
 **Analyzes** patterns with Claude AI
