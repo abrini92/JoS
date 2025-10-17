@@ -124,7 +124,7 @@ class UnifiedAIBrain:
     def generate(self, prompt: str) -> Optional[str]:
         """Generate text from prompt (generic method)"""
         if self.active == "ollama" and self.ollama_brain:
-            return self.ollama_brain.generate_text(prompt)
+            return self.ollama_brain.generate(prompt)
         elif self.active == "claude" and self.claude_brain:
             # Use Claude's message API
             try:
