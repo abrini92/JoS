@@ -47,15 +47,14 @@ class UnifiedAIBrain:
     def __init__(self):
         self.ollama_brain = None
         self.claude_brain = None
+        self.active = None
         
         # Try Ollama first
         if OLLAMA_AVAILABLE:
             try:
                 self.ollama_brain = get_ollama_brain()
-                if self.ollama_brain.available:
+                if self.ollama_brain and self.ollama_brain.available:
                     self.active = "ollama"
-                else:
-                    self.active = None
             except:
                 self.ollama_brain = None
         
@@ -122,6 +121,24 @@ class UnifiedAIBrain:
         else:
             return None
     
+    def generate(self, prompt: str) -> Optional[str]:
+        """Generate text from prompt (generic method)"""
+        if self.active == "ollama" and self.ollama_brain:
+            return self.ollama_brain.generate_text(prompt)
+        elif self.active == "claude" and self.claude_brain:
+            # Use Claude's message API
+            try:
+                message = self.claude_brain.client.messages.create(
+                    model="claude-3-haiku-20240307",
+                    max_tokens=2048,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                return message.content[0].text
+            except:
+                return None
+        else:
+            return None
+    
     def get_status_message(self) -> str:
         """Get human-readable status"""
         if self.active == "ollama":
@@ -143,6 +160,8 @@ def get_ai_brain() -> UnifiedAIBrain:
         _unified_brain = UnifiedAIBrain()
     return _unified_brain
 
+# Alias for compatibility
+get_unified_brain = get_ai_brain
 
 def get_ai_status() -> str:
     """Get AI status message"""
