@@ -116,7 +116,17 @@ Respond in JSON format with these exact keys:
         try:
             # Use unified AI brain (Ollama or Claude)
             console.print(f"[dim]Using: {self.ai.__class__.__name__}[/dim]")
+            console.print(f"[dim]AI Status: {self.ai.get_status_message()}[/dim]")
+            
             response_text = self.ai.generate(prompt)
+            
+            # Check if AI returned something
+            if not response_text:
+                console.print("[red]⚠️  AI returned None. Checking availability...[/red]")
+                console.print(f"[dim]Active backend: {self.ai.active}[/dim]")
+                if self.ai.ollama_brain:
+                    console.print(f"[dim]Ollama available: {self.ai.ollama_brain.available}[/dim]")
+                raise ValueError("AI returned no response. Check if Ollama is running and model is installed.")
             
             # Parse JSON response
             # Try to extract JSON if response contains extra text
