@@ -92,25 +92,27 @@ class OllamaAIBrain:
                 full_prompt = f"{system}\n\n{prompt}"
             
             # Call Ollama via subprocess
+            # Note: ollama run doesn't support --temperature flag
+            # Temperature can be set via Modelfile or API
             result = subprocess.run(
-                [
-                    "ollama", "run", self.config.model,
-                    "--temperature", str(self.config.temperature),
-                    full_prompt
-                ],
+                ["ollama", "run", self.config.model, full_prompt],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=60  # Increased timeout for longer responses
             )
             
             if result.returncode == 0:
                 return result.stdout.strip()
             else:
+                print(f"⚠️  Ollama error (returncode {result.returncode}):")
+                print(f"STDERR: {result.stderr}")
                 return None
                 
         except subprocess.TimeoutExpired:
+            print("⚠️  Ollama timeout (>30s)")
             return None
-        except Exception:
+        except Exception as e:
+            print(f"⚠️  Ollama exception: {e}")
             return None
     
     def predict_next_action(self, context: Dict[str, Any]) -> Optional[str]:
