@@ -9,20 +9,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
-from anthropic import Anthropic
-from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax
 
-# Load environment variables from .env file
-load_dotenv()
+try:
+    from .ai_brain_unified import get_unified_brain
+except ImportError:
+    from jarvisos.core.ai_brain_unified import get_unified_brain
 
 console = Console()
 
 
 class Generator:
-    """Generates automation scripts using Claude AI"""
+    """Generates automation scripts using AI (Ollama-first, Claude fallback)"""
 
     def __init__(self, data_dir: str = "data", scripts_dir: str = "generated_scripts"):
         self.data_dir = Path(data_dir)
@@ -33,15 +33,8 @@ class Generator:
         self.insights_file = self.data_dir / "insights.json"
         self.generated_tasks_file = self.data_dir / "generated_tasks.json"
         
-        # Initialize Claude API
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-        if not api_key:
-            raise ValueError(
-                "❌ ANTHROPIC_API_KEY not found in environment variables.\n"
-                "Set it with: export ANTHROPIC_API_KEY='your-key-here'"
-            )
-        
-        self.client = Anthropic(api_key=api_key)
+        # Initialize unified AI brain (Ollama-first)
+        self.ai = get_unified_brain()
 
     def load_insights(self) -> Dict:
         """Load insights from JSON file"""
@@ -88,15 +81,20 @@ Respond in JSON format:
 """
 
         try:
-            message = self.client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=1024,
-                messages=[{"role": "user", "content": prompt}]
-            )
+            # Use unified AI brain (Ollama or Claude)
+            console.print(f"[dim]Using: {self.ai.__class__.__name__}[/dim]")
+            response_text = self.ai.generate(prompt)
             
-            response_text = message.content[0].text
+            if not response_text:
+                raise ValueError("AI returned no response")
+            
+            # Try to extract JSON if response contains extra text
+            if '{' in response_text and '}' in response_text:
+                json_start = response_text.find('{')
+                json_end = response_text.rfind('}') + 1
+                response_text = response_text[json_start:json_end]
+            
             result = json.loads(response_text)
-            
             return result.get('tasks', [])
             
         except Exception as e:
@@ -131,13 +129,12 @@ Respond with ONLY the Python code, no explanations or markdown formatting.
 """
 
         try:
-            message = self.client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=4096,
-                messages=[{"role": "user", "content": prompt}]
-            )
+            # Use unified AI brain (Ollama or Claude)
+            console.print(f"[dim]Using: {self.ai.__class__.__name__}[/dim]")
+            script_code = self.ai.generate(prompt)
             
-            script_code = message.content[0].text
+            if not script_code:
+                raise ValueError("AI returned no response")
             
             # Clean up any markdown code blocks if present
             if script_code.startswith("```python"):
